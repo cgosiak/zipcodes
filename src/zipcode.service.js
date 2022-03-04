@@ -185,15 +185,6 @@ class ZipCodeService {
       throw "you must supply both latitude and longitude to this function";
     }
   }
-
-  /*
-    - design and define zipcode api
-    - implement zipcode api handler
-    - search by full or partial zipcode
-    - search by full or partial city name
-    - search by closest latitude/longitude
-    - filter by additional attributes
-     */
 }
 
 module.exports.ZipCodeService = ZipCodeService;
