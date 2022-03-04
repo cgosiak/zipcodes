@@ -1,4 +1,4 @@
-# Aura Code Challenge
+# Code Challenge
 
 This challenge will allow you to demonstrate your knowledge and understanding of node.js.
 It is intended to be familiar, much like a development story that could come up on the job.
