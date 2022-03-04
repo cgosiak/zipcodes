@@ -22,10 +22,10 @@ class ZipCodeService {
         let latitude;
         let longitude;
         if (Object.keys(filters).indexOf("latitude") > -1) {
-            latitude = filters["latitude"];
+            latitude = +filters["latitude"];
         }
         if (Object.keys(filters).indexOf("longitude") > -1) {
-            longitude = filters["longitude"];
+            longitude = +filters["longitude"];
         }
 
         // fail if only latitude or longitude was supplied
@@ -58,9 +58,15 @@ class ZipCodeService {
                     case ("state"):
                     case ("country"):
                         // exact match for type. state. county
+                        if (!entry[filter]) {
+                            return false;
+                        }
                         return entry[filter].toLowerCase() === filters[filter].toLowerCase();
                     default:
                         // default to string in string match
+                        if (!entry[filter]) {
+                            return false;
+                        }
                         return entry[filter].toLowerCase().indexOf(filters[filter].toLowerCase()) > -1;
                 }
             });
@@ -82,7 +88,7 @@ class ZipCodeService {
 
             // filter out unacceptable_cities
             if (exact_match) {
-                const unacceptable_cities = exact_match["unacceptable_cities"].split(',').map(x => x.trim().toLowerCase());
+                const unacceptable_cities = exact_match["unacceptable_cities"]?.split(',').map(x => x.trim().toLowerCase());
                 if (unacceptable_cities) {
                     filtered_data = filtered_data.filter(entry => {
                         return unacceptable_cities.indexOf(entry.primary_city.toLowerCase()) === -1;
