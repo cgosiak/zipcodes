@@ -1,6 +1,7 @@
 const { geoDelta } = require("./geo.service");
 
-const GEOLOCATION_THRESHOLD = 10; // km threshold for returning matching zipcodes 
+const GEOLOCATION_THRESHOLD = 10; // km threshold for returning matching zipcodes
+const POPULATION_THRESHOLD = 500; // population threshold +/-
 
 class ZipCodeService {
     constructor() {
@@ -35,6 +36,13 @@ class ZipCodeService {
         let filtered_data = this.data.filter(entry => {
             return Object.keys(filters).every(filter => {
                 switch (filter) {
+                    case ("estimated_population"):
+                        // filtering based on population
+                        const population = +(entry["estimated_population"]);
+                        if (isNaN(population)) {
+                            return false;
+                        }
+                        return  population <= +(filters["estimated_population"]) + POPULATION_THRESHOLD && population >= +(filters["estimated_population"]) - POPULATION_THRESHOLD
                     case ("latitude"):
                     case ("longitude"):
                         // filtering based on coords
@@ -99,6 +107,16 @@ class ZipCodeService {
         if (input) {
             return this.search({
                 "primary_city": input
+            });
+        } else {
+            throw "input cannot be empty";
+        }
+    }
+
+    searchByEstimatedPopulation(input) {
+        if (input) {
+            return this.search({
+                "estimated_population": input
             });
         } else {
             throw "input cannot be empty";

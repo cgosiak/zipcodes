@@ -51,6 +51,13 @@ describe("search by city", () => {
   });
 });
 
+describe("search by population", () => {
+  test("returns correct results with estimated_population threshold", () => {
+    const response = zipcodeService.searchByEstimatedPopulation(10000);
+    expect(response.length).toStrictEqual(30);
+  });
+});
+
 describe("search by geo coords", () => {
   test("returns correct results with coords", () => {
     const response = zipcodeService.searchByLocation(43.96, -69.78);
