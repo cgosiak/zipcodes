@@ -1,4 +1,6 @@
-// lambda-like handler function
+const { ZipCodeService } = require("./zipcode.service");
+
 module.exports.handler = async (event) => {
-  // do stuff...
+  const zipCodeService = new ZipCodeService();
+  return zipCodeService.search(event.queryStringParameters);
 };
