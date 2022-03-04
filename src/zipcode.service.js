@@ -142,9 +142,14 @@ class ZipCodeService {
       }
     }
 
+    // TODO: would be nice to sort results based on accuracy to input filters
+    // TODO: would be nice to have a second return value of an exact match
+
+    // assign array to set for uniqueness and then back to array
     return Array.from(new Set(filtered_data));
   }
 
+  // helper function to search by zip
   searchByZipCode(input) {
     if (input) {
       return this.search({
@@ -155,6 +160,7 @@ class ZipCodeService {
     }
   }
 
+  // helper function to search by primary_city
   searchByCityName(input) {
     if (input) {
       return this.search({
@@ -165,6 +171,7 @@ class ZipCodeService {
     }
   }
 
+  // helper function to search by estimated_population
   searchByEstimatedPopulation(input) {
     if (input) {
       return this.search({
@@ -175,6 +182,7 @@ class ZipCodeService {
     }
   }
 
+  // helper function to search by geo coords
   searchByLocation(latitude, longitude) {
     if (latitude != null && longitude != null) {
       return this.search({
