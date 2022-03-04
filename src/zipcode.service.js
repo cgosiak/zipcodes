@@ -9,13 +9,14 @@ class ZipCodeService {
     }
 
     search(filters) {
-        // disallow complex matches
-        if (Object.keys(filters).indexOf("acceptable_cities") > -1) {
-            throw "cannot filter with key (acceptable_cities)"
-        }
-        if (Object.keys(filters).indexOf("unacceptable_cities") > -1) {
-            throw "cannot filter with key (unacceptable_cities)"
-        }
+        // throw error on invalid filtering key
+        const VALID_FILTERING_KEYS = ["zip", "type", "primary_city", "state", "county", "timezone", "area_codes" , "latitude", "longitude", "country", "estimated_population"];
+
+        Object.keys(filters).forEach(key => {
+            if (VALID_FILTERING_KEYS.indexOf(key.toLowerCase()) === -1) {
+                throw `cannot filter with key (${key})`
+            }
+        });
 
         // remove latitude and longitude for additional lookup
         let latitude;

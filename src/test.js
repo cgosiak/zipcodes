@@ -4,6 +4,18 @@ const { ZipCodeService } = require("./zipcode.service");
 
 const zipcodeService = new ZipCodeService();
 
+describe("open search", () => {
+  test("correctly calculates zero distance", () => {
+    const delta = geoDelta(44.9794633,-93.2782834, 44.9794633,-93.2782834);
+    expect(delta).toStrictEqual(0);
+  });
+
+  test("correctly calculates non-zero distance", () => {
+    const delta = geoDelta(44.9794633,-93.2782834, 44.981911, -93.277264);
+    expect(delta).toBeCloseTo(0.28);
+  });
+});
+
 describe("search by zipcode", () => {
   test("returns correct results with full zipcode", () => {
     const response = zipcodeService.searchByZipCode("01001");
