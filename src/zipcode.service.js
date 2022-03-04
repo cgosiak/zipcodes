@@ -16,18 +16,18 @@ class ZipCodeService {
             throw "cannot filter with key (unacceptable_cities)"
         }
 
-        // remove latitiude and longitude for additional lookup
-        let latitiude;
+        // remove latitude and longitude for additional lookup
+        let latitude;
         let longitude;
-        if (Object.keys(filters).indexOf("latitiude") > -1) {
-            latitiude = filters["latitiude"];
+        if (Object.keys(filters).indexOf("latitude") > -1) {
+            latitude = filters["latitude"];
         }
         if (Object.keys(filters).indexOf("longitude") > -1) {
             longitude = filters["longitude"];
         }
 
         // fail if only latitude or longitude was supplied
-        if ((latitiude && !longitude) || (longitude && !latitiude)) {
+        if ((latitude != null && longitude == null) || (longitude != null && latitude == null)) {
             throw 'you must supply both latitude and longitude when searching via geo coordinates'
         }
 
@@ -35,12 +35,16 @@ class ZipCodeService {
         let filtered_data = this.data.filter(entry => {
             return Object.keys(filters).every(filter => {
                 switch (filter) {
-                    case ("latitiude"):
+                    case ("latitude"):
                     case ("longitude"):
                         // filtering based on coords
-                        delete filters["latitiude"];
-                        delete filters["longitude"];
-                        return geoDelta(latitiude, longitude, entry["latitude"], entry["longitude"]) <= GEOLOCATION_THRESHOLD;
+                        const entryLatitude = +(entry["latitude"]);
+                        const entryLongitude = +(entry["longitude"]);
+                        if (isNaN(entryLatitude) || isNaN(entryLongitude)) {
+                            return false;
+                        }
+                        const delta = geoDelta(latitude, longitude, entryLatitude, entryLongitude);
+                        return delta <= GEOLOCATION_THRESHOLD;
                     case ("type"):
                     case ("state"):
                     case ("country"):
@@ -102,13 +106,13 @@ class ZipCodeService {
     }
 
     searchByLocation(latitude, longitude) {
-        if (latitude && longitude) {
+        if (latitude != null && longitude != null) {
             return this.search({
                 "latitude": latitude,
                 "longitude": longitude
             });
         } else {
-            throw "must supply both latitude and longitude";
+            throw "you must supply both latitude and longitude to this function";
         }
     }
 

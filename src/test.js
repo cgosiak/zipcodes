@@ -52,18 +52,23 @@ describe("search by city", () => {
 });
 
 describe("search by geo coords", () => {
+  test("returns correct results with coords", () => {
+    const response = zipcodeService.searchByLocation(43.96, -69.78);
+    expect(response.length).toStrictEqual(2);
+  });
+
   test("throw error when only latitude is defined", () => {
     const t = () => {
       const response = zipcodeService.searchByLocation(44.9794633, null);
     };
-    expect(t).toThrow("must supply both latitude and longitude");
+    expect(t).toThrow("you must supply both latitude and longitude to this function");
   });
 
   test("throw error when only longitude is defined", () => {
     const t = () => {
       const response = zipcodeService.searchByLocation(null, -93.2782834);
     };
-    expect(t).toThrow("must supply both latitude and longitude");
+    expect(t).toThrow("you must supply both latitude and longitude to this function");
   });
 });
 
